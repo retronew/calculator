@@ -35,7 +35,7 @@ function removeWindow(index: number) {
 }
 
 function calculate(data: Data): {
-  result: string | null
+  result: number | null
   formula: string
   error: boolean
   errorMessage?: string
@@ -109,11 +109,11 @@ function calculate(data: Data): {
   formula += `
     \\text{Load} = \\frac{(${s2} - ${s3}) \\cdot ${wallWeight} + ${s3} \\cdot ${windowWeight}}{${s1}}
     \\\\[5pt]
-    = ${math.format(result, { precision: 4 })}
+    = ${result}
   `
 
   return {
-    result: math.format(result, { precision: 4 }),
+    result,
     formula,
     error: false,
   }
