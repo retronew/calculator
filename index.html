@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      ;(function () {
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        var setting = localStorage.getItem('vueuse-color-scheme') || 'auto'
+        if (setting === 'dark' || (prefersDark && setting !== 'light'))
+          document.documentElement.classList.toggle('dark', true)
+      })()
+    </script>
+    <style>
+      html.dark {
+        color-scheme: dark;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      !(function () {
+        var currentColor = localStorage.getItem('calCurrentColor') || 'green'
+        var currentRadius = localStorage.getItem('calCurrentRadius') || '0.5'
+        document.body.classList.add(`theme-${currentColor}`)
+        document.body.style.setProperty('--radius', `${currentRadius}rem`)
+      })()
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
