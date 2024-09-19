@@ -121,6 +121,12 @@ function calculate(data: Data): {
 
 const result = computed(() => calculate(data.value))
 
+definePage({
+  meta: {
+    layout: 'page',
+  },
+})
+
 const toolName = '统计荷载计算工具'
 
 useSeoMeta({
@@ -130,147 +136,153 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="mx-auto max-w-2xl py-6">
-    <h1 class="mb-8 text-center text-2xl font-bold">
-      {{ toolName }}
-    </h1>
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <div class="flex flex-col gap-1.5">
-        <Label
-          for="axisSpan"
-          class="block text-sm text-gray-700 font-medium"
-        >轴线开间（米）</Label>
-        <Input
-          id="axisSpan"
-          v-model="data.axisSpan"
-          type="number"
-        />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <Label
-          for="floorHeight"
-          class="block text-sm text-gray-700 font-medium"
-        >层高（米）</label>
-        <Input
-          id="floorHeight"
-          v-model="data.floorHeight"
-          type="number"
-        />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <Label
-          for="beamHeight"
-          class="block text-sm text-gray-700 font-medium"
-        >框架梁高（米）</label>
-        <Input
-          id="beamHeight"
-          v-model="data.beamHeight"
-          type="number"
-        />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <Label
-          for="wallWeight"
-          class="block text-sm text-gray-700 font-medium"
-        >墙体自重</label>
-        <Input
-          id="wallWeight"
-          v-model="data.wallWeight"
-          type="number"
-        />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <Label
-          for="columnWidth"
-          class="block text-sm text-gray-700 font-medium"
-        >框架柱宽</label>
-        <Input
-          id="columnWidth"
-          v-model="data.columnWidth"
-          type="number"
-        />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <Label
-          for="windowWeight"
-          class="block text-sm text-gray-700 font-medium"
-        >窗自重</label>
-        <Input
-          id="windowWeight"
-          v-model="data.windowWeight"
-          type="number"
-        />
-      </div>
-    </div>
-    <div
-      v-for="(window, index) in data.windows"
-      :key="index"
-      class="grid grid-cols-1 mt-4 gap-4 md:grid-cols-2"
-    >
-      <div class="flex flex-col gap-1.5">
-        <Label
-          :for="`windowWidth${index}`"
-          class="block text-sm text-gray-700 font-medium"
-        >门窗口宽（米）</label>
-        <Input
-          :id="`windowWidth${index}`"
-          v-model="window.width"
-          type="number"
-        />
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <Label
-          :for="`windowHeight${index}`"
-          class="block text-sm text-gray-700 font-medium"
-        >高度（米）</label>
-        <div class="relative">
+  <div class="px-4 py-6 lg:px-8 sm:px-6">
+    <div class="mx-auto max-w-2xl">
+      <h1 class="mb-8 text-center text-2xl font-bold">
+        {{ toolName }}
+      </h1>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="flex flex-col gap-1.5">
+          <Label
+            for="axisSpan"
+            class="block text-sm text-gray-700 font-medium"
+          >轴线开间（米）</Label>
           <Input
-            :id="`windowHeight${index}`"
-            v-model="window.height"
+            id="axisSpan"
+            v-model="data.axisSpan"
             type="number"
           />
-          <span class="absolute top-1/2 transform -right-9 -translate-y-1/2">
-            <button
-              v-if="data.windows.length > 1"
-              class="flex justify-center p-1 text-red-500 hover:text-red-700"
-              @click="removeWindow(index)"
-            >
-              <i
-                i="lucide-x"
-                class="h-4 w-4"
-              />
-            </button>
-          </span>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <Label
+            for="floorHeight"
+            class="block text-sm text-gray-700 font-medium"
+          >层高（米）</label>
+          <Input
+            id="floorHeight"
+            v-model="data.floorHeight"
+            type="number"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <Label
+            for="beamHeight"
+            class="block text-sm text-gray-700 font-medium"
+          >框架梁高（米）</label>
+          <Input
+            id="beamHeight"
+            v-model="data.beamHeight"
+            type="number"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <Label
+            for="wallWeight"
+            class="block text-sm text-gray-700 font-medium"
+          >墙体自重</label>
+          <Input
+            id="wallWeight"
+            v-model="data.wallWeight"
+            type="number"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <Label
+            for="columnWidth"
+            class="block text-sm text-gray-700 font-medium"
+          >框架柱宽</label>
+          <Input
+            id="columnWidth"
+            v-model="data.columnWidth"
+            type="number"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <Label
+            for="windowWeight"
+            class="block text-sm text-gray-700 font-medium"
+          >窗自重</label>
+          <Input
+            id="windowWeight"
+            v-model="data.windowWeight"
+            type="number"
+          />
         </div>
       </div>
-    </div>
-    <Button
-      class="mt-5 w-full font-semibold"
-      @click="addWindow"
-    >
-      增加门窗
-    </Button>
-    <div class="mt-8 rounded-lg bg-gray-100 p-4">
-      <h2 class="mb-4 text-center text-xl font-semibold">
-        计算结果
-      </h2>
-      <div class="mb-4">
-        <p class="rounded bg-white p-2">
-          <Katex
-            :expression="result.formula"
-            display-mode
+      <div
+        v-for="(window, index) in data.windows"
+        :key="index"
+        class="grid grid-cols-1 mt-4 gap-4 md:grid-cols-2"
+        :class="{ 'mr-8 sm:mr-0': data.windows.length > 1 }"
+      >
+        <div class="flex flex-col gap-1.5">
+          <Label
+            :for="`windowWidth${index}`"
+            class="block text-sm text-gray-700 font-medium"
+          >门窗口宽（米）</label>
+          <Input
+            :id="`windowWidth${index}`"
+            v-model="window.width"
+            type="number"
           />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <Label
+            :for="`windowHeight${index}`"
+            class="block text-sm text-gray-700 font-medium"
+          >高度（米）</label>
+          <div class="relative">
+            <Input
+              :id="`windowHeight${index}`"
+              v-model="window.height"
+              type="number"
+            />
+            <span class="absolute top-1/2 transform -right-9 -translate-y-1/2">
+              <button
+                v-if="data.windows.length > 1"
+                class="flex justify-center p-1 text-red-500 hover:text-red-700"
+                @click="removeWindow(index)"
+              >
+                <i
+                  i="lucide-x"
+                  class="h-4 w-4"
+                />
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <Button
+        class="mt-5 w-full font-semibold"
+        @click="addWindow"
+      >
+        增加门窗
+      </Button>
+      <div class="mt-8 rounded-lg bg-gray-100 p-4">
+        <h2 class="mb-4 text-center text-xl font-semibold">
+          计算结果
+        </h2>
+        <div class="mb-4">
+          <p class="rounded bg-white p-2">
+            <ScrollArea class="w-full whitespace-nowrap">
+              <Katex
+                :expression="result.formula"
+                display-mode
+              />
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          </p>
+        </div>
+        <p
+          class="text-center text-xl font-semibold"
+          :class="{ 'text-destructive': result.error }"
+        >
+          最终结果：{{ result.result }}
+          <span v-if="result.error">
+            {{ result.errorMessage }}
+          </span>
         </p>
       </div>
-      <p
-        class="text-center text-xl font-semibold"
-        :class="{ 'text-destructive': result.error }"
-      >
-        最终结果：{{ result.result }}
-        <span v-if="result.error">
-          {{ result.errorMessage }}
-        </span>
-      </p>
     </div>
   </div>
 </template>
